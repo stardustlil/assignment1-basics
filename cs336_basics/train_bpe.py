@@ -176,22 +176,23 @@ def train_bpe2(input_path: str | os.PathLike, vocab_size: int, special_tokens: l
             
 
 if __name__ == "__main__":
-    import pickle, time, resource
+    import pickle , time , resource
 
     t = time.time()
-    vocab, merges = train_bpe2("data/TinyStoriesV2-GPT4-train.txt", 10000, ["<|endoftext|>"])
+    vocab , merges = train_bpe2("data/TinyStoriesV2-GPT4-train.txt" , 10000 , ["<|endoftext|>"])
+    #延迟
     elapsed = time.time() - t
-
-    # 内存峰值（macOS 上单位是 byte）
+    #主进程峰值内存
     main_mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024**3
+    #子进程峰值内存
     child_mem = resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss / 1024**3
 
-    print(f"总耗时：{elapsed:.1f} 秒")
-    print(f"主进程内存峰值：{main_mem:.2f} GB")
-    print(f"单个子进程内存峰值：{child_mem:.2f} GB")
+    print(f"训练耗时：{elapsed:.1f} 秒")
+    print(f"主进程峰值内存 {main_mem:.2f} GB")
+    print(f"子进程峰值内存{child_mem:.2f} GB")
     print(f"vocab 大小：{len(vocab)}，merge 次数：{len(merges)}")
 
-    with open("ts_vocab.pkl", "wb") as f:
+    with open("output/ts_vocab.pkl", "wb") as f:
         pickle.dump(vocab, f)
-    with open("ts_merges.pkl", "wb") as f:
+    with open("output/ts_merges.pkl", "wb") as f:
         pickle.dump(merges, f)

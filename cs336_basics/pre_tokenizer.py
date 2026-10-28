@@ -112,22 +112,3 @@ def pretokenize(input_path, special_tokens, num_processes = None, chunk_bytes = 
 
 
 
-
-
-if __name__ == "__main__":
-    import pickle, time
-
-    cache = "ts_train_pretok.pkl"
-    if os.path.exists(cache):
-        with open(cache, "rb") as f:
-            wc = pickle.load(f)
-        print("read on cache")
-    else:
-        t = time.time()
-        wc = pretokenize("data/TinyStoriesV2-GPT4-train.txt", ["<|endoftext|>"])
-        print(f"耗时{time.time() - t:.1f}秒")
-        with open(cache , "wb") as f:
-            pickle.dump(wc, f)
-
-    print(f"不重复的 pre-token 数：{len(wc)}")
-    print(f"pre-token 总数：{sum(wc.values())}")
