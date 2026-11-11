@@ -166,3 +166,5 @@ data/
 *.pkl
 
 /output
+.DS_Store
+.vscode/
